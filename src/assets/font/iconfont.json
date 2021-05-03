@@ -1,0 +1,23 @@
+{
+  "id": "2524504",
+  "name": "ele后台",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "7561636",
+      "name": "密码",
+      "font_class": "mima",
+      "unicode": "e7c5",
+      "unicode_decimal": 59333
+    },
+    {
+      "icon_id": "19102800",
+      "name": "账号",
+      "font_class": "zhanghao",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    }
+  ]
+}
