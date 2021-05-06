@@ -59,7 +59,7 @@
           <el-button size="mini" type="primary" icon="el-icon-edit" @click="editUserGet(scope.row.id)"></el-button>
           <el-button size="mini" type="danger" icon="el-icon-delete" @click="confirmDelete(scope.row.id)"></el-button>
           <el-tooltip class="item" effect="dark" content="分配角色" placement="top" :enterable="false">
-            <el-button size="mini" type="warning" icon="el-icon-setting"></el-button>
+            <el-button size="mini" type="warning" icon="el-icon-setting" @click="distributeRolePrepare(scope.row)"></el-button>
           </el-tooltip>
         </template>
       </el-table-column>
@@ -124,6 +124,29 @@
         <el-button type="primary" @click="editUserRequest">确 定</el-button>
       </span>
     </el-dialog>
+
+    <!-- 分配角色对话框 -->
+    <el-dialog
+      title="提示"
+      :visible.sync="distributeRoleVisible"
+      width="50%">
+      <p>当前用户：{{distributeRoleUser.username}}</p>
+      <p>当前角色：{{distributeRoleUser.role_name}}</p>
+      <p>分配角色：
+        <el-select v-model="selectedRoleId" placeholder="请选择">
+          <el-option
+            v-for="item in rolelist"
+            :key="item.id"
+            :label="item.roleName"
+            :value="item.id">
+          </el-option>
+        </el-select>
+      </p>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="distributeRoleVisible = false">取 消</el-button>
+        <el-button type="primary" @click="distributeRoleRequest">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -155,6 +178,7 @@ export default {
       total: 0,
       dialogVisible: false,
       editUserVisible: false,
+      distributeRoleVisible: false,
       addUserForm: {
         'username': '',
         'password': '',
@@ -194,7 +218,10 @@ export default {
           { required: true, validator: checkMobile, trigger: 'blur' },
         ],
       },
-
+      //分配角色时，该行的用户信息
+      distributeRoleUser: {},
+      rolelist: [],
+      selectedRoleId: '',
     }
   },
   created() {
@@ -206,7 +233,6 @@ export default {
       if(res.meta.status !== 200) this.$message.error('获取用户数据失败！')
       this.userInfo = res.data.users
       this.total = res.data.total
-      console.log(res);
     },
     handleSizeChange(pageqnt) {
       this.requestUser.pagesize = pageqnt
@@ -290,6 +316,27 @@ export default {
         this.getUserData()
         return this.$message.success('删除成功')
       }
+    },
+    //给用户分配角色，渲染角色列表
+    async distributeRolePrepare(row) {
+      this.distributeRoleUser = row
+      console.log(row);
+      const {data: res} = await this.$http.get('roles')
+      if(res.meta.status !== 200) return this.$message.error('获取角色列表失败')
+      this.rolelist = res.data
+      console.log(this.rolelist);
+      this.distributeRoleVisible = true
+    },
+    //用户选择好角色，请求分配角色
+    async distributeRoleRequest() {
+      if(!this.selectedRoleId) {
+        return this.$message.error('请选择角色')
+      }
+      console.log(this.distributeRoleUser.id,this.selectedRoleId);
+      const {data: res} = await this.$http.put(`users/${this.distributeRoleUser.id}/role`,{rid: this.selectedRoleId})
+      if(res.meta.status !== 200) return this.$message.error('更新角色失败')
+      this.$message.success('更新角色成功')
+      this.distributeRoleVisible = false
     }
   },
 
