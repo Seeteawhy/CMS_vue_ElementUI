@@ -5,10 +5,11 @@ import './assets/css/global.css'
 import './assets/font/iconfont.css'
 import axios from 'axios'
 import './plugins/element'
+import TreeTable from 'vue-table-with-tree-grid'
 
 
 
-axios.defaults.baseURL = 'http://timemeetyou.com:8889/api/private/v1/'
+axios.defaults.baseURL = 'http://www.ysqorz.top:8888/api/private/v1/'
 axios.interceptors.request.use(config => {
   config.headers.authorization = window.sessionStorage.getItem('token')
   return config
@@ -20,6 +21,8 @@ Vue.prototype.$http = axios
 
 
 Vue.config.productionTip = false
+
+Vue.component('tree-table', TreeTable)
 
 new Vue({
   router,
