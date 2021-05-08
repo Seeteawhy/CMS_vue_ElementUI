@@ -6,8 +6,15 @@ import './assets/font/iconfont.css'
 import axios from 'axios'
 import './plugins/element'
 import TreeTable from 'vue-table-with-tree-grid'
+import moment from 'moment'
 
 
+
+import VueQuillEditor from 'vue-quill-editor'
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+Vue.use(VueQuillEditor)
 
 axios.defaults.baseURL = 'http://www.ysqorz.top:8888/api/private/v1/'
 axios.interceptors.request.use(config => {
@@ -16,6 +23,13 @@ axios.interceptors.request.use(config => {
 })
 Vue.prototype.$http = axios
 
+Vue.filter('dataFormat', function (dateStr, pattern = 'YYYY-MM-DD') {
+  if (dateStr) {
+    return moment(dateStr).format(pattern)
+  } else {
+    return dateStr
+  }
+})
 
 
 

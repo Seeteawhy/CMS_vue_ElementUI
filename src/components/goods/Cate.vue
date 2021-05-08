@@ -240,7 +240,6 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).catch(e => e)
-      console.log(confirmResult);
       if(confirmResult === 'cancel') return this.$message('取消删除')
       if(confirmResult === 'confirm') {
         const {data: res} = await this.$http.delete(`categories/${cate.cat_id}`)
