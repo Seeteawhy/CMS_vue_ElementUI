@@ -16,14 +16,22 @@ import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 Vue.use(VueQuillEditor)
 
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+
 axios.defaults.baseURL = 'http://www.ysqorz.top:8888/api/private/v1/'
 axios.interceptors.request.use(config => {
+  NProgress.start()
   config.headers.authorization = window.sessionStorage.getItem('token')
+  return config
+})
+axios.interceptors.response.use(config => {
+  NProgress.done()
   return config
 })
 Vue.prototype.$http = axios
 
-Vue.filter('dataFormat', function (dateStr, pattern = 'YYYY-MM-DD') {
+Vue.filter('dataFormat', function (dateStr, pattern = 'YYYY-MM-DD hh:mm:ss') {
   if (dateStr) {
     return moment(dateStr).format(pattern)
   } else {
