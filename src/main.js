@@ -19,6 +19,8 @@ Vue.use(VueQuillEditor)
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
+import './mock/index'
+
 axios.defaults.baseURL = 'http://www.ysqorz.top:8888/api/private/v1/'
 axios.interceptors.request.use(config => {
   NProgress.start()
